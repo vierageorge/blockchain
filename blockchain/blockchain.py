@@ -35,6 +35,6 @@ class Blockchain:
                 check_proof = True
             else:
                 new_proof += 1
-            return new_proof
+        return new_proof
 
 # Mining the Blockchain
