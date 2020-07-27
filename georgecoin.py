@@ -17,6 +17,7 @@ class Blockchain:
         self.chain = []
         self.transactions = []
         self.create_block(proof = 1, previous_hash = '0') # Genesis block
+        self.nodes = set()
 
     def create_block(self, proof, previous_hash):
         """Creates a block, adds it to the blockchain. Returns such block.
@@ -74,6 +75,10 @@ class Blockchain:
         })
         previous_block = self.get_previous_block()
         return previous_block["index"]+1
+
+    def add_node(self, address):
+        parsed_url = urlparse(address)
+        self.nodes.add(parsed_url.netloc)
 
 # PART 2: MINING THE BLOCKCHAIN
 
