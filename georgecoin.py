@@ -3,7 +3,7 @@
 import datetime
 import hashlib
 import json
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import requests
 from uuid import uuid4
 from urllib.parse import urlparse
@@ -84,7 +84,7 @@ class Blockchain:
         network = self.nodes
         longest_chain = None
         max_length = len(self.chain)
-        for nodes in network:
+        for node in network:
             response = requests.get(f'http://{node}/get_chain')
             if response.status_code == 200:
                 length = response.json()['length']
@@ -154,6 +154,23 @@ def add_transaction(sender, receiver, amount):
         return 'Missing transactions elements.', 400
     index = blockchain.add_transaction(json['sender'], json['receiver'], json['amount'])
     response = {'message': f'Your transaction should be added to the next Block with index {index}'}
+    return jsonify(response), 201
+
+# PART 3: Descentralizing the blockchain
+
+# Connect new nodes
+@app.route('/connect_node', methods = ['POST'])
+def connect_node():
+    json = request.get_json()
+    nodes = json.get('nodes')
+    if nodes is None:
+        return "No nodes in request", 400
+    for node in nodes:
+        blockchain.add_node(node)
+    response = {
+        'message':f'New nodes connected. Total list of nodes:',
+        'total_nodes': list(blockchain.nodes)
+    }
     return jsonify(response), 201
 
 
