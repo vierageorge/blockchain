@@ -111,6 +111,7 @@ blockchain = Blockchain()
 # Mining a new block
 @app.route('/mine_block', methods = ['GET'])
 def mine_block():
+    # pylint: disable=invalid-sequence-index
     previous_block = blockchain.get_previous_block()
     previous_proof = previous_block['proof']
     proof = blockchain.proof_of_work(previous_proof)
@@ -173,6 +174,19 @@ def connect_node():
     }
     return jsonify(response), 201
 
+# Replace the chain for the longest chain if applies.
+@app.route('/replace_chain', methods = ['GET'])
+def replace_chain():
+    if blockchain.replace_chain():
+        return jsonify({
+            'message': 'Blockchain was replaced for the longest one.',
+            'new_chain': blockchain.chain
+            }), 200
+    else:
+        return jsonify({
+            'message': 'Blockchain is up to date.',
+            'actual_chain': blockchain.chain
+            }), 200
 
 # Running the web app
 app.run(host='0.0.0.0', port=5000)
