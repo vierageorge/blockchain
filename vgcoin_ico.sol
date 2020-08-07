@@ -1,5 +1,5 @@
 //VGCoin ICO
-pragma solidity ^0.7.0;
+pragma solidity ^0.6.6;
 
 contract vgcoin_ico {
     
@@ -15,7 +15,7 @@ contract vgcoin_ico {
     //Mapping from the investor's address to vgcoins and USD
     mapping(address => uint) equity_vgcoins;
     mapping(address => uint) equity_usd;
-
+    
     //Check if an investor can buy vgcoins
     modifier can_buy_vgcoins(uint usd_invested){
         require(usd_invested * usd_to_vgcoins + total_vgcoins_bought <= max_vgcoins);
@@ -23,15 +23,15 @@ contract vgcoin_ico {
     }
     
     //Getting the equity in vgcoins of an investor
-    function  equity_in_vgcoins(address investor) external constant returns (uint){
-         return equity_vgcoins[investor]
+    function  equity_in_vgcoins(address investor) external view returns (uint){
+         return equity_vgcoins[investor];
     }
     
     //Getting the equity in USD of an investor
-    function  equity_in_usd(address investor) external constant returns (uint){
-         return equity_usd[investor]
+    function  equity_in_usd(address investor) external view returns (uint){
+         return equity_usd[investor];
     }
-
+    
     //Buying vgcoins
     function buy_vgcoins(address investor, uint usd_invested) external
     can_buy_vgcoins(usd_invested) {
@@ -40,7 +40,7 @@ contract vgcoin_ico {
         equity_usd[investor] = equity_vgcoins[investor] / usd_to_vgcoins;
         total_vgcoins_bought += vgcoins_bought;
     }
-
+    
     //Selling vgcoins
     function sell_vgcoins(address investor, uint vgcoins_sold) external {
         equity_vgcoins[investor] -= vgcoins_sold;
