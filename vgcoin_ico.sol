@@ -15,4 +15,20 @@ contract vgcoin_ico {
     //Mapping from the investor's address to vgcoins and USD
     mapping(address => uint) equity_vgcoins;
     mapping(address => uint) equity_usd;
+
+    //Check if an investor can buy vgcoins
+    modifier can_buy_vgcoins(uint usd_invested){
+        require(usd_invested * usd_to_vgcoins + total_vgcoins_bought <= max_vgcoins);
+        _;
+    }
+    
+    //Getting the equity in vgcoins of an investor
+    function  equity_in_vgcoins(address investor) external constant returns (uint){
+         return equity_vgcoins[investor]
+    }
+    
+    //Getting the equity in USD of an investor
+    function  equity_in_usd(address investor) external constant returns (uint){
+         return equity_usd[investor]
+    }
 }
