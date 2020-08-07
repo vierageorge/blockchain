@@ -40,4 +40,11 @@ contract vgcoin_ico {
         equity_usd[investor] = equity_vgcoins[investor] / usd_to_vgcoins;
         total_vgcoins_bought += vgcoins_bought;
     }
+
+    //Selling vgcoins
+    function sell_vgcoins(address investor, uint vgcoins_sold) external {
+        equity_vgcoins[investor] -= vgcoins_sold;
+        equity_usd[investor] = equity_vgcoins[investor] / usd_to_vgcoins;
+        total_vgcoins_bought -= vgcoins_sold;
+    }
 }
