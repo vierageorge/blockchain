@@ -31,4 +31,13 @@ contract vgcoin_ico {
     function  equity_in_usd(address investor) external constant returns (uint){
          return equity_usd[investor]
     }
+
+    //Buying vgcoins
+    function buy_vgcoins(address investor, uint usd_invested) external
+    can_buy_vgcoins(usd_invested) {
+        uint vgcoins_bought = usd_invested * usd_to_vgcoins;
+        equity_vgcoins[investor] += vgcoins_bought;
+        equity_usd[investor] = equity_vgcoins[investor] / usd_to_vgcoins;
+        total_vgcoins_bought += vgcoins_bought;
+    }
 }
